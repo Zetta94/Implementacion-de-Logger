@@ -28,3 +28,4 @@ export const generateProducts = () =>{
         thumbnail: faker.image.url()
     }
 }
+

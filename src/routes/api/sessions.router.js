@@ -8,11 +8,17 @@ router.post('/register', passport.authenticate('register', {
     failureRedirect: '/register',
     failureFlash: true
 }),(req,res)=>{
+    req.logger.info('New User Registered')
     res.send({status:"success",message : "New User Registered"})
 })
 
 router.post('/login', passport.authenticate('login', {failureRedirect: '/login'}),async (req,res)=>{
-    if(!req.user) return res.status(400).send({status: "error", error: "Incomplete data"})
+    req.logger.http('Route POST: /login')
+    if(!req.user) {
+        req.logger.fatal('Incomplete data')
+        return res.status(400).send({status: "error", error: "Incomplete data"})
+    }
+
     try{
         req.session.user = {
             first_name: req.user.first_name,
@@ -22,9 +28,10 @@ router.post('/login', passport.authenticate('login', {failureRedirect: '/login'}
             role: req.user.role,
             cart: req.user.cart
         }
-        console.log(req.session.user)
+        req.logger.info(req.session.user)
         res.redirect('/products')   
     }catch(error){
+        req.logger.error('Authenticate Error')
         res.status(500).send({error:"error",message: error.message})
     }
 })
@@ -38,6 +45,7 @@ router.get('/githubcallback',passport.authenticate('github',{failureRedirect:'/l
 
 router.post('/logout', (req, res) => {
     req.session.destroy((err) => {
+        req.logger.info('Session end')
         if (err) return res.status(500).send('Error al cerrar sesión')
         res.redirect('/login')
     })
@@ -63,7 +71,7 @@ router.get('/current', (req, res) => {
         req.session.user = userDTO
         res.status(200).json({ payload: userDTO })
     } catch (error) {
-        console.error('Error al obtener el usuario actual:', error)
+        req.logger.error('Error al obtener el usuario actual')
         res.status(500).json({ error: `Error en el servidor: ${error.message}` })
     }
 });

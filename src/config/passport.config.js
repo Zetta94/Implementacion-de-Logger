@@ -65,14 +65,6 @@ const initializePassport = () => {
                     return done(null, false)
                 }
 
-                // // Asignar un carrito al usuario
-                // let existsCart = await cartManager.getCartByUser(user._id)
-                // if (existsCart.length === 0) {
-                //     console.log("Entre a la primera")
-                //     existsCart = await cartManager.addCart(user._id)
-                //     const newCartUser = await sessionManager.addCartUser(user._id,existsCart._id)
-                // }
-
                 return done(null, user)
             } catch (error) {
                 return done(error)

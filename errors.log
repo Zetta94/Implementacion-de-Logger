@@ -1,0 +1,3 @@
+01-08-2024 18:28:23 error: Test - ERROR
+01-08-2024 18:28:23 fatal: Test - FATAL
+01-08-2024 18:28:57 fatal: Carrito no encontrado -> (Route GET: /carts/:cid)
